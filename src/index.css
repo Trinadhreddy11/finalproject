@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --indigo-500: #6366f1;
+    --indigo-600: #4f46e5;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-slate-900 via-indigo-900 to-purple-900 text-slate-900 antialiased min-h-screen;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-indigo-600 rounded-full hover:bg-indigo-700 transition-colors;
+}
+
+/* Glass morphism effects */
+.glass-morphism {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl;
+}
+
+.glass-card {
+  @apply bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 shadow-lg;
+}
+
+/* Button animations */
+.btn-hover-effect {
+  @apply relative overflow-hidden transition-all duration-300 ease-out;
+}
+
+.btn-hover-effect::after {
+  content: '';
+  @apply absolute inset-0 bg-white/20 transform scale-x-0 origin-left transition-transform duration-300;
+}
+
+.btn-hover-effect:hover::after {
+  @apply scale-x-100;
+}
+
+/* Card hover effects */
+.hover-card-effect {
+  @apply transition-all duration-300 ease-out hover:shadow-lg hover:-translate-y-1;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Progress bar styles */
+.CircularProgressbar-text {
+  @apply font-medium text-xs;
+}
+
+.CircularProgressbar-path {
+  @apply transition-all duration-300;
+}
+
+/* Dashboard typography */
+.dashboard-title {
+  @apply text-base font-medium tracking-tight text-white;
+}
+
+.dashboard-subtitle {
+  @apply text-xs font-medium text-gray-300;
+}
+
+.dashboard-value {
+  @apply text-lg font-semibold text-white;
+}
+
+.dashboard-label {
+  @apply text-xs uppercase tracking-wider text-gray-400;
+}
+
+/* Responsive typography */
+@layer base {
+  h1 { @apply text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight text-white; }
+  h2 { @apply text-lg md:text-xl lg:text-2xl font-semibold tracking-tight text-white; }
+  h3 { @apply text-base md:text-lg lg:text-xl font-medium tracking-tight text-white; }
+  h4 { @apply text-sm md:text-base lg:text-lg font-medium tracking-tight text-white; }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+}

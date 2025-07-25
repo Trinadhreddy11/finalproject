@@ -14,6 +14,7 @@ export default function AdminDashboard() {
   const { addNotification } = useMessageStore();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [showCourseModal, setShowCourseModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'users' | 'leaderboard'>('users');
   const [newUser, setNewUser] = useState({
     email: '',
@@ -26,6 +27,7 @@ export default function AdminDashboard() {
     type: 'info' as 'info' | 'success' | 'warning' | 'error',
     recipients: [] as ('students' | 'faculty')[]
   });
+  const [newCourse, setNewCourse] = useState({ title: '', description: '' });
 
   const stats = {
     totalStudents: authorizedUsers.students.length,
@@ -104,6 +106,17 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleAddCourse = () => {
+    if (!newCourse.title || !newCourse.description) {
+      alert('Please fill in all fields');
+      return;
+    }
+    addCourse(newCourse.title, newCourse.description);
+    setShowCourseModal(false);
+    setNewCourse({ title: '', description: '' });
+    alert('Course added successfully!');
+  };
+
   const toggleRecipient = (recipient: 'students' | 'faculty') => {
     setNotification(prev => ({
       ...prev,
@@ -151,6 +164,31 @@ export default function AdminDashboard() {
           value={stats.totalAssessments}
           description="Created assessments"
         />
+      </div>
+
+      <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <h2 className="text-lg font-bold text-indigo-800 mb-4">Quick Actions</h2>
+        <div className="flex space-x-4">
+          <button
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            onClick={() => setShowCourseModal(true)}
+          >
+            <Plus className="w-4 h-4 mr-2 inline" />
+            Create Course
+          </button>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <Plus className="w-4 h-4 mr-2 inline" />
+            Create Assessment
+          </button>
+          <button className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+            <Users className="w-4 h-4 mr-2 inline" />
+            Bulk Import Users
+          </button>
+          <button className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+            <ClipboardList className="w-4 h-4 mr-2 inline" />
+            Export Data
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -463,6 +501,69 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Add Course Modal */}
+      {showCourseModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">Add New Course</h3>
+              <button
+                onClick={() => setShowCourseModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  value={newCourse.title}
+                  onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter course title"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={newCourse.description}
+                  onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  rows={3}
+                  placeholder="Enter course description"
+                />
+              </div>
+              <div className="flex justify-end space-x-2 pt-4">
+                <button
+                  onClick={() => setShowCourseModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddCourse}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                >
+                  Add Course
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div>
+        <h2 className="text-xl font-bold text-indigo-800 mb-4">Admin Tools</h2>
+        <p className="text-slate-700">Here you can manage users, courses, and view platform statistics.</p>
+        {/* Add more admin features/components here */}
+      </div>
     </div>
   );
 }

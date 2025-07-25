@@ -15,10 +15,12 @@ import AssessmentList from './components/AssessmentList';
 import AdminDashboard from './components/AdminDashboard';
 import NotificationCenter from './components/NotificationCenter';
 import ChatBot from './components/ChatBot';
+import FacultyDashboard from './components/FacultyDashboard';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [selectedLanguage, setSelectedLanguage] = useState<'python' | 'javascript' | 'java' | 'cpp'>('python');
+  const languageOptions = ['python', 'javascript', 'java', 'cpp'];
+  const [selectedLanguage, setSelectedLanguage] = useState(languageOptions[0]);
   const { user, userRole, loading, signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -166,13 +168,14 @@ function AppContent() {
               {activeTab === 'editor' && userRole === 'student' && (
                 <select
                   value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value as any)}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
                   className="block w-40 pl-3 pr-10 py-2 text-base border-0 bg-slate-100 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm rounded-lg"
                 >
-                  <option value="python">Python</option>
-                  <option value="javascript">JavaScript</option>
-                  <option value="java">Java</option>
-                  <option value="cpp">C++</option>
+                  {languageOptions.map(lang => (
+                    <option key={lang} value={lang}>
+                      {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                    </option>
+                  ))}
                 </select>
               )}
               
@@ -201,7 +204,32 @@ function AppContent() {
             />
           )}
           {activeTab === 'dashboard' && userRole === 'admin' && (
-            <AdminDashboard />
+            <div className="p-8">
+              <div className="mb-6">
+                <h1 className="text-3xl font-bold text-indigo-900">Welcome, Admin!</h1>
+                <p className="text-slate-700 mt-2">
+                  Here is a quick overview of platform activity and management tools.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h2 className="text-lg font-semibold text-indigo-800 mb-2">Total Users</h2>
+                  <p className="text-2xl font-bold text-indigo-600">1,245</p>
+                </div>
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h2 className="text-lg font-semibold text-indigo-800 mb-2">Active Courses</h2>
+                  <p className="text-2xl font-bold text-indigo-600">32</p>
+                </div>
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h2 className="text-lg font-semibold text-indigo-800 mb-2">Pending Assessments</h2>
+                  <p className="text-2xl font-bold text-indigo-600">7</p>
+                </div>
+              </div>
+              <AdminDashboard />
+            </div>
+          )}
+          {activeTab === 'dashboard' && userRole === 'faculty' && (
+            <FacultyDashboard />
           )}
           {activeTab === 'attendance' && userRole === 'faculty' && (
             <AttendanceManager />
